@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Alpha — по ту сторону тумана</title>
+    <meta name="description" content="Атмосферный архив, посвящённый визуальной эстетике раннего Minecraft Alpha и легенде о Хиробрине.">
+    
+    <style>
+        /* --- Переменные и базовые настройки --- */
+        :root {
+            --color-grass: #527D38;
+            --color-dark-green: #293C2D;
+            --color-earth: #756149;
+            --color-stone: #737A73;
+            --color-fog: #DEE4DA;
+            --color-bg: #F2F1E9;
+            --color-text: #1E261E;
+            
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            --font-pixel: "Courier New", Courier, monospace;
+            
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            
+            --border-radius: 4px;
+            --border-color: #C0C8BD;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- Типографика --- */
+        h1, h2, h3 {
+            line-height: 1.2;
+            color: var(--color-dark-green);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            margin-bottom: var(--spacing-md);
+            border-bottom: 3px solid var(--color-grass);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            max-width: 70ch;
+        }
+
+        a {
+            color: var(--color-grass);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-dark-green);
+        }
+
+        a:focus-visible, button:focus-visible {
+            outline: 3px solid var(--color-grass);
+            outline-offset: 2px;
+        }
+
+        /* --- Архивные метки --- */
+        .archive-label {
+            font-family: var(--font-pixel);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-earth);
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        /* --- Навигация --- */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(242, 241, 233, 0.95);
+            backdrop-filter: blur(4px);
+            border-bottom: 2px solid var(--color-stone);
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.75rem var(--spacing-sm);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav a {
+            font-family: var(--font-pixel);
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: var(--color-dark-green);
+            text-transform: uppercase;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            border-color: var(--color-stone);
+            background: var(--color-fog);
+        }
+
+        /* --- Основной контейнер --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-sm);
+        }
+
+        section {
+            padding: var(--spacing-lg) 0;
+            border-bottom: 1px dashed var(--color-stone);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        /* --- Первый экран (Hero) --- */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: center;
+            min-height: 80vh;
+            padding-top: var(--spacing-lg);
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-earth);
+            margin-bottom: var(--spacing-md);
+            max-width: 45ch;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-grass);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-family: var(--font-pixel);
+            font-weight: bold;
+            border: 2px solid var(--color-dark-green);
+            border-radius: var(--border-radius);
+            transition: background-color 0.2s, transform 0.1s;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-dark-green);
+            color: #fff;
+        }
+
+        .btn-primary:active {
+            transform: translateY(2px);
+        }
+
+        .hero-image-wrapper {
+            border: 4px solid var(--color-earth);
+            background: var(--color-stone);
+            padding: 0.5rem;
+            box-shadow: 8px 8px 0 rgba(41, 60, 45, 0.2);
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            image-rendering: pixelated; /* Для старых текстур */
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: var(--color-earth);
+            margin-top: 0.5rem;
+            font-style: italic;
+            text-align: right;
+        }
+
+        /* --- Галерея --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .gallery-card {
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s;
+        }
+
+        .gallery-card:hover {
+            border-color: var(--color-grass);
+        }
+
+        .gallery-image-btn {
+            background: var(--color-fog);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-image-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Сохраняем пропорции */
+            display: block;
+            image-rendering: pixelated;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-image-btn:hover img {
+            transform: scale(1.02);
+        }
+
+        .gallery-info {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-number {
+            font-family: var(--font-pixel);
+            color: var(--color-grass);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .gallery-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark-green);
+        }
+
+        .gallery-desc {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .gallery-source {
+            font-size: 0.8rem;
+            margin-top: auto;
+            word-break: break-all;
+        }
+
+        /* --- Сетка деталей --- */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .detail-item {
+            background: #fff;
+            padding: 1.5rem;
+            border-left: 4px solid var(--color-grass);
+            border-radius: var(--border-radius);
+        }
+
+        .detail-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-item p {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-link {
+            font-size: 0.85rem;
+            font-family: var(--font-pixel);
+        }
+
+        /* --- Легенда --- */
+        .legend-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: start;
+        }
+
+        .legend-image {
+            border: 4px solid var(--color-dark-green);
+            background: var(--color-stone);
+            padding: 0.5rem;
+        }
+
+        .legend-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #e65100;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        /* --- Источники --- */
+        .sources-list {
+            list-style: none;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .sources-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .sources-list li::before {
+            content: "▪";
+            color: var(--color-grass);
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        .disclaimer {
+            background: var(--color-fog);
+            padding: 1.5rem;
+            border: 2px solid var(--color-stone);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        /* --- Футер --- */
+        footer {
+            text-align: center;
+            padding: var(--spacing-md) var(--spacing-sm);
+            background: var(--color-dark-green);
+            color: var(--color-fog);
+            font-size: 0.9rem;
+            margin-top: var(--spacing-lg);
+        }
+
+        /* --- Модальное окно (Lightbox) --- */
+        dialog {
+            border: 4px solid var(--color-earth);
+            border-radius: var(--border-radius);
+            background: var(--color-bg);
+            padding: 0;
+            max-width: 95vw;
+            max-height: 95vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        dialog::backdrop {
+            background: rgba(20, 30, 20, 0.9);
+        }
+
+        .dialog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--color-dark-green);
+            color: #fff;
+        }
+
+        .dialog-title {
+            font-family: var(--font-pixel);
+            font-size: 0.9rem;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            line-height: 1;
+        }
+
+        .btn-close:hover {
+            color: var(--color-grass);
+        }
+
+        .dialog-content {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .dialog-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            image-rendering: pixelated;
+            border: 2px solid var(--border-color);
+        }
+
+        .dialog-caption {
+            margin-top: 1rem;
+            text-align: center;
+            max-width: 80ch;
+            font-size: 1rem;
+        }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
+                padding-top: var(--spacing-md);
+            }
+            .legend-layout {
+                grid-template-columns: 1fr;
+            }
+            .hero-image-wrapper {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                gap: 0.75rem;
+                font-size: 0.8rem;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-image-btn {
+                aspect-ratio: auto;
+                max-height: 300px;
+            }
+            .hero {
+                gap: var(--spacing-md);
+            }
+            .dialog-content img {
+                max-height: 60vh;
+            }
+        }
+
+        /* --- Настройки анимации --- */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .gallery-image-btn:hover img {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav aria-label="Основная навигация">
+            <ul>
+                <li><a href="#world">Мир Alpha</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#details">Детали</a></li>
+                <li><a href="#legend">Легенда</a></li>
+                <li><a href="#sources">Источники</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Раздел 1: Первый экран -->
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <span class="archive-label">ARCHIVE / ALPHA</span>
+                <h1>Minecraft Alpha — по ту сторону тумана</h1>
+                <p class="hero-subtitle">Мир яркой травы, простых пейзажей и тумана, за которым воображение рисовало больше, чем можно было увидеть.</p>
+                <a href="#gallery" class="btn-primary">Рассмотреть мир</a>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="assets/herobrine-alpha.jpg" alt="Пиксельное изображение Хиробрина на фоне леса" width="800" height="600">
+                <span class="image-caption">Иллюстрация, связанная с легендой сообщества. Не является доказательством.</span>
+            </div>
+        </section>
+
+        <!-- Раздел 2: Мир Alpha -->
+        <section id="world">
+            <span class="archive-label">01 / Контекст</span>
+            <h2>Мир Alpha</h2>
+            <p>Этот проект посвящён визуальному восприятию раннего Minecraft Java Edition Alpha и изображениям, которые в сообществе связывают с обозначением Alpha 1.0.16_02.</p>
+            <p>Глядя на эти кадры, мы обращаем внимание на детали, знакомые каждому, кто застал ранние версии игры: насыщенную зелёную растительность, простые пиксельные текстуры, незамысловатые формы рельефа и туманную даль, скрывающую границы прогруженных чанков.</p>
+            <p><em>Важно отметить:</em> мы не утверждаем, что предоставленные кадры достоверно сделаны в указанной версии, так как их происхождение и отсутствие изменений не установлены. Этот архив — скорее попытка запечатлеть саму атмосферу.</p>
+        </section>
+
+        <!-- Раздел 3: Галерея -->
+        <section id="gallery">
+            <span class="archive-label">02 / Архив снимков</span>
+            <h2>Галерея</h2>
+            <div class="gallery-grid">
+                
+                <!-- Карточка 1 -->
+                <figure class="gallery-card" id="card-1">
+                    <button class="gallery-image-btn" aria-label="Открыть изображение 01: Лес за туманом" data-src="assets/alpha-1.webp" data-caption="Лесной пейзаж: насыщенная зелень, простые текстуры и туман вдали.">
+                        <img src="assets/alpha-1.webp" alt="Лесной пейзаж Minecraft с густой зеленью" loading="lazy">
+                    </button>
+                    <figcaption class="gallery-info">
+                        <span class="gallery-number">01</span>
+                        <h3 class="gallery-title">Лес за туманом</h3>
+                        <p class="gallery-desc">Лесной пейзаж: насыщенная зелень, простые текстуры и туман вдали.</p>
+                        <a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_1%29.png" target="_blank" rel="noopener noreferrer" class="gallery-source">Источник (Крипипаста Wiki)</a>
+                    </figcaption>
+                </figure>
+
+                <!-- Карточка 2 -->
+                <figure class="gallery-card" id="card-2">
+                    <button class="gallery-image-btn" aria-label="Открыть изображение 02: След на песке" data-src="assets/alpha-2.webp" data-caption="Крестообразное углубление в песке. Необычная деталь изображения, происхождение которой не установлено.">
+                        <img src="assets/alpha-2.webp" alt="Песчаный берег с крестообразным углублением" loading="lazy">
+                    </button>
+                    <figcaption class="gallery-info">
+                        <span class="gallery-number">02</span>
+                        <h3 class="gallery-title">След на песке</h3>
+                        <p class="gallery-desc">Крестообразное углубление в песке. Необычная деталь изображения, происхождение которой не установлено.</p>
+                        <a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_2%29.png" target="_blank" rel="noopener noreferrer" class="gallery-source">Источник (Крипипаста Wiki)</a>
+                    </figcaption>
+                </figure>
+
+                <!-- Карточка 3 -->
+                <figure class="gallery-card" id="card-3">
+                    <button class="gallery-image-btn" aria-label="Открыть изображение 03: Тихая поляна" data-src="assets/alpha-3.webp" data-caption="Лесная поляна: животные и выпавший предмет на траве.">
+                        <img src="assets/alpha-3.webp" alt="Лесная поляна с травой и предметом" loading="lazy">
+                    </button>
+                    <figcaption class="gallery-info">
+                        <span class="gallery-number">03</span>
+                        <h3 class="gallery-title">Тихая поляна</h3>
+                        <p class="gallery-desc">Лесная поляна: животные и выпавший предмет на траве.</p>
+                        <a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_3%29.png" target="_blank" rel="noopener noreferrer" class="gallery-source">Источник (Крипипаста Wiki)</a>
+                    </figcaption>
+                </figure>
+
+                <!-- Карточка 4 -->
+                <figure class="gallery-card" id="card-4">
+                    <button class="gallery-image-btn" aria-label="Открыть изображение 04: Легенда в кадре" data-src="assets/herobrine-alpha.jpg" data-caption="Изображение, связанное с легендой о Хиробрине.">
+                        <img src="assets/herobrine-alpha.jpg" alt="Изображение Хиробрина в тумане" loading="lazy">
+                    </button>
+                    <figcaption class="gallery-info">
+                        <span class="gallery-number">04</span>
+                        <h3 class="gallery-title">Легенда в кадре</h3>
+                        <p class="gallery-desc">Изображение, связанное с легендой о Хиробрине.</p>
+                        <a href="https://ru.minecraft.wiki/w/Alpha_v1.0.16_02_(Java_Edition)#/media/%D0%A4%D0%B0%D0%B9%D0%BB:%D0%A5%D0%B8%D1%80%D0%BE%D0%B1%D1%80%D0%B8%D0%BD_%D0%B2_Alpha.jpg" target="_blank" rel="noopener noreferrer" class="gallery-source">Источник (Minecraft Wiki)</a>
+                    </figcaption>
+                </figure>
+
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.9rem; color: #666;">
+                <em>Примечание: первые три изображения происходят со страницы крипипасты. Они представлены как найденные иллюстрации, а не как подтверждённые архивные снимки оригинальной версии. Надпись с номером версии внутри кадра не является самостоятельным подтверждением происхождения.</em>
+            </p>
+        </section>
+
+        <!-- Раздел 4: Знакомые детали -->
+        <section id="details">
+            <span class="archive-label">03 / Визуальный анализ</span>
+            <h2>Знакомые детали</h2>
+            <div class="details-grid">
+                
+                <div class="detail-item">
+                    <h3>Трава и листва</h3>
+                    <p>Насыщенные оттенки зелёного, видимые на лесных изображениях, создают ощущение густой, живой природы. Это один из главных цветовых якорей раннего Minecraft.</p>
+                    <a href="#card-1" class="detail-link">Смотреть кадр 01 ↑</a>
+                </div>
+                
+                <div class="detail-item">
+                    <h3>Текстуры блоков</h3>
+                    <p>Повторяющиеся пиксельные рисунки земли, травы и листвы создают узнаваемый визуальный ритм. Простота этих текстур оставляет много пространства для воображения.</p>
+                    <a href="#card-3" class="detail-link">Смотреть кадр 03 ↑</a>
+                </div>
+                
+                <div class="detail-item">
+                    <h3>Простые пейзажи</h3>
+                    <p>Формы рельефа и расположение объектов создают ощущение открытого, спокойного пространства. Мир кажется большим и ждущим исследования.</p>
+                    <a href="#card-2" class="detail-link">Смотреть кадр 02 ↑</a>
+                </div>
+                
+                <div class="detail-item">
+                    <h3>Туман</h3>
+                    <p>Ограниченная видимость на горизонте скрывает детали и заставляет дорисовывать недостающее. Туман превращает обычный пейзаж в место, полное тихой загадки.</p>
+                    <a href="#card-4" class="detail-link">Смотреть кадр 04 ↑</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Раздел 5: Легенда в тумане -->
+        <section id="legend">
+            <span class="archive-label">04 / Фольклор сообщества</span>
+            <h2>Легенда в тумане</h2>
+            <div class="legend-layout">
+                <div>
+                    <p>Хиробрин — персонаж легенд и крипипаст Minecraft-сообщества, а не подтверждённый обитатель оригинальной игры.</p>
+                    <p>В историях игроков он предстаёт как загадочная фигура с пустыми глазами, которая появляется на периферии зрения, исчезает при попытке приблизиться или оставляет после себя странные изменения в мире.</p>
+                    <p>Почему этот образ ассоциируется с загадочными наблюдениями? Старые скриншоты низкого разрешения, плотный туман, ограничивающий обзор, и недостаток информации порождали множество домыслов. В условиях, когда игра была не до конца изучена, любая странность могла показаться частью скрытой механики или проделкой неизвестной сущности.</p>
+                    <p>Важно помнить, что Хиробрин — это элемент фольклора, а не реальная функция игры. Однако сама атмосфера ранних версий — с её туманом и чувством одиночества — прекрасно объясняет, почему эта легенда так прижилась.</p>
+                    <div class="warning-box">
+                        Хиробрин — персонаж легенд и крипипаст Minecraft-сообщества, а не подтверждённый обитатель оригинальной игры.
+                    </div>
+                </div>
+                <div class="legend-image">
+                    <img src="assets/herobrine-alpha.jpg" alt="Хиробрин в тумане — иллюстрация легенды" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- Раздел 6: Источники -->
+        <section id="sources">
+            <span class="archive-label">05 / Документация</span>
+            <h2>Источники</h2>
+            
+            <ul class="sources-list">
+                <li><a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02" target="_blank" rel="noopener noreferrer">Minecraft Creepypasta Wiki: Alpha 1.0.16_02</a></li>
+                <li><a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_1%29.png" target="_blank" rel="noopener noreferrer">Скриншот 1 (Лес за туманом)</a></li>
+                <li><a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_2%29.png" target="_blank" rel="noopener noreferrer">Скриншот 2 (След на песке)</a></li>
+                <li><a href="https://minecraftcreepypasta.fandom.com/ru/wiki/Alpha_1.0.16_02?file=Alpha_1.0.16_02_%28%D1%81%D0%BA%D1%80%D0%B8%D0%BD%D1%88%D0%BE%D1%82_3%29.png" target="_blank" rel="noopener noreferrer">Скриншот 3 (Тихая поляна)</a></li>
+                <li><a href="https://ru.minecraft.wiki/w/Alpha_v1.0.16_02_(Java_Edition)" target="_blank" rel="noopener noreferrer">Minecraft Wiki: Alpha v1.0.16_02 (Java Edition)</a></li>
+                <li><a href="https://ru.minecraft.wiki/w/Alpha_v1.0.16_02_(Java_Edition)#/media/%D0%A4%D0%B0%D0%B9%D0%BB:%D0%A5%D0%B8%D1%80%D0%BE%D0%B1%D1%80%D0%B8%D0%BD_%D0%B2_Alpha.jpg" target="_blank" rel="noopener noreferrer">Изображение Хиробрина (Minecraft Wiki)</a></li>
+            </ul>
+
+            <div class="disclaimer">
+                <p><strong>Примечание:</strong> Первые три изображения взяты со страницы крипипасты. Их подлинность и отсутствие изменений не установлены. Сведения о правообладателях и условиях использования необходимо дополнительно проверить на страницах файлов перед публичной публикацией.</p>
+                <p>Указание источника не заменяет разрешения на использование изображения.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Неофициальный учебный проект. Не связан с Mojang Studios или Microsoft.</p>
+    </footer>
+
+    <!-- Модальное окно (Lightbox) -->
+    <dialog id="lightbox" aria-labelledby="dialog-title">
+        <div class="dialog-header">
+            <span id="dialog-title" class="dialog-title">Просмотр изображения</span>
+            <button class="btn-close" id="close-btn" aria-label="Закрыть просмотр">&times;</button>
+        </div>
+        <div class="dialog-content">
+            <img id="lightbox-img" src="" alt="">
+            <p id="lightbox-caption" class="dialog-caption"></p>
+        </div>
+    </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dialog = document.getElementById('lightbox');
+            const dialogImg = document.getElementById('lightbox-img');
+            const dialogCaption = document.getElementById('lightbox-caption');
+            const closeBtn = document.getElementById('close-btn');
+            const galleryButtons = document.querySelectorAll('.gallery-image-btn');
+            
+            let previouslyFocusedElement = null;
+
+            // Открытие модального окна
+            galleryButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    previouslyFocusedElement = document.activeElement;
+                    
+                    const src = btn.getAttribute('data-src');
+                    const caption = btn.getAttribute('data-caption');
+                    const imgAlt = btn.querySelector('img').alt;
+                    
+                    dialogImg.src = src;
+                    dialogImg.alt = imgAlt;
+                    dialogCaption.textContent = caption;
+                    
+                    // Предотвращаем прокрутку фона
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Открываем нативный диалог
+                    dialog.showModal();
+                });
+            });
+
+            // Закрытие по кнопке
+            closeBtn.addEventListener('click', () => {
+                closeModal();
+            });
+
+            // Закрытие по клику вне изображения (на backdrop)
+            dialog.addEventListener('click', (e) => {
+                const rect = dialog.getBoundingClientRect();
+                const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                    rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+                if (!isInDialog) {
+                    closeModal();
+                }
+            });
+
+            // Закрытие по клавише Escape (нативная поддержка, но подстрахуемся)
+            dialog.addEventListener('cancel', (e) => {
+                e.preventDefault();
+                closeModal();
+            });
+
+            // Функция закрытия
+            function closeModal() {
+                dialog.close();
+                document.body.style.overflow = '';
+                if (previouslyFocusedElement) {
+                    previouslyFocusedElement.focus();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
