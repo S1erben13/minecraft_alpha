@@ -89,7 +89,7 @@ p{margin:0 0 17px}
 .sources-list a{overflow-wrap:anywhere;text-decoration:none}
 .sources-list a:hover{text-decoration:underline}
 .source-note{font-size:14px;color:var(--muted)}
-footer{padding:26px 0;color:var(--muted);font-size:12px}
+footer{padding:26px 0;colr:var(--muted);font-size:12px}
 .footer-row{display:flex;justify-content:space-between;gap:25px}
 footer a{white-space:nowrap}
 dialog{border:1px solid #a0ae95;background:var(--paper);color:var(--ink);padding:18px;width:min(1120px,calc(100% - 24px));max-height:calc(100dvh - 24px);overflow:auto}
