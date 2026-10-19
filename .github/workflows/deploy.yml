@@ -3,30 +3,72 @@ name: Deploy static site
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
+  check:
+    name: Проверка и сборка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Проверка HTML (HTMLHint)
+        run: npx --yes htmlhint@1 index.html
+
+      - name: Проверка CSS (Stylelint)
+        run: npx --yes stylelint@16 style.css
+
+      - name: Проверка ссылок на локальные файлы
+        run: |
+          missing=0
+          for f in $(grep -oE '(src|href)="[^"#:]+"' index.html | sed -E 's/^(src|href)="//; s/"$//' | sort -u); do
+            if [ -f "$f" ]; then echo "OK  $f"; else echo "НЕТ ФАЙЛА: $f"; missing=1; fi
+          done
+          exit $missing
+
+      - name: Сборка сайта в _site
+        run: |
+          mkdir _site
+          cp index.html style.css _site/
+          cp -r assets _site/
+          ls -R _site | head -n 30
+
+      - name: Setup Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
   deploy:
+    name: Публикация на GitHub Pages
+    needs: check
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
